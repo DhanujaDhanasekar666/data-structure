@@ -1,40 +1,61 @@
-#include<stdio.h>
-#include<math.h>
-void InsertionSort(int arr[],int n){
-    int i,key,j;
-    for(i=1;i<n;i++){
-        key=arr[i];
-        j=i-1;
-        while(j>=0 && arr[j]>key){
-            arr[j+1]=arr[j];
-            j=j-1;
-        }
-        arr[j+1]=key;
-    }
+#include <stdio.h>
+#include <stdlib.h>
+#define SIZE 10
+struct node {
+   int data;
+   struct node *next;
+};
+void initialize(struct node **table) {
+   int i;
+   for (i = 0; i < SIZE; i++) {
+    table[i] = NULL;
+   }
 }
-void PrintArray(int arr[],int n){
-    int i;
-    printf("Given Array Sorted using Insertion sort:\n");
-    for(i=0;i<n;i++){
-        
-        printf("%d ",arr[i]);
-    }
-    printf("\n");
+int hash(int key) {
+   return key % SIZE;
 }
-int main(){
-    int arr[]={23,89,75,90,11,21};
-  
-    int n = sizeof(arr)/sizeof(arr[0]);
-    printf("Given array:\n");
-    for(int i=0;i<n;i++){
-        printf("%d ",arr[i]);
+void insert(struct node **table, int key) {
+   int index = hash(key);
+   struct node *new_node = (struct node *)malloc(sizeof(struct node));
+   new_node->data = key;
+   new_node->next = NULL;
+   if (table[index] == NULL) {
+    table[index] = new_node;
+   } else {
+    struct node *temp = table[index];
+    while (temp->next != NULL) {
+    temp = temp->next;
     }
-    printf("\n");
-    InsertionSort(arr,n);
-    PrintArray(arr,n);  
-    return 0;
+    temp->next = new_node;
+   }
 }
-
+void display(struct node **table) {
+   int i;
+   for (i = 0; i < SIZE; i++) {
+    printf("[%d] -> ", i);
+    struct node *temp = table[i];
+    while (temp != NULL) {
+    printf("%d -> ", temp->data);
+    temp = temp->next;
+    }
+    printf("NULL\n");
+   }
+}
+int main() {
+   struct node *hash_table[SIZE];
+   initialize(hash_table);
+   insert(hash_table, 51);
+   insert(hash_table, 15);
+   insert(hash_table, 25);
+   insert(hash_table, 36);
+   insert(hash_table, 18);
+   insert(hash_table, 16);
+   insert(hash_table, 27);
+   insert(hash_table, 33);
+   display(hash_table);
+   return 0;
+}
+1:07 PM
 
 
 
